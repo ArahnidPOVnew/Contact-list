@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Телефонна книга</title>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <style type="text/css">
+        body{
+            background-image: url(ava7.png);
+        }
+
+        table {
+            background-color: rgba(169, 169, 169, 0.53);
+        }
+        form {
+            max-width:1050px;
+            margin: 0 auto;
+            padding-top: 20px;
+            position: relative;
+
+        }
+
+    </style>
+    <script type="text/javascript">
+        var app = angular.module( 'app', [ ] )
+                .controller('contactlistCtrl', function( $scope ){    <!--задаємо контролер з назвою contactlistCtrl  -->
+                    $scope.newPersonId = -1;           <!-- змінна яка буде показувати які дані зараз розміщені в формі, -1 нові дані -->
+                    $scope.contactlist  = [                <!-- масив  -->
+                        {                                  <!-- створюємо масив даних з даними абонента -->
+                            name: 'Білл Гейц',
+                            phone: '+545-6546-5466',
+                            email: 'Bill@gmail.com'
+                        }
+                    ];
+                    $scope.addNewPerson = function() {    <!-- добавимо дані нових абонентів -->
+                        if ( $scope.name != '' ) {        <!-- перевыряэмо що $scope не пустий  без цієї перевірки при натисненні на кнопку "Добавити" буде добавлятися пусте поле-->
+                            $scope.contactlist .push({        <!-- push добавляє дані елемента в кінець масива-->
+                                name: $scope.name,
+                                phone: $scope.phone,
+                                email: $scope.email
+                            });
+                            $scope.name = '';            <!-- обнулити поле введення -->
+                            $scope.phone = '';           <!-- обнулити поле введення -->
+                            $scope.email = '';           <!-- обнулити поле введення -->
+                        }                                             <!--  -->
+                    }
+                    $scope.savePerson = function() {     <!-- зберегти редаговані дані -->
+                        if( $scope.newPersonId > -1 ){   <!-- робимо перевырку що це новий контакт. -1 --це новий контакт, значення "від  0 зайнято" -->
+                            var id = $scope.newPersonId; <!--щоб скоротити запис, змінній  id присвоюємо значення $scope.newPersonId -->
+                            $scope.contactlist [id].name = $scope.name; <!-- замінюємо дані на ті що вводяться в інпути -->
+                            $scope.contactlist [id].phone = $scope.phone;  <!--те саме для "phone"  -->
+                            $scope.contactlist [id].email = $scope.email;
+                            $scope.name = '';                <!-- обнулити поле введення після кліка по кнопці збереження змінених даних -->
+                            $scope.phone = '';               <!-- після того як дані добавлені очищаємо input -->
+                            $scope.email = '';
+                            $scope.newPersonId = -1;
+                        }
+                    }
+                    $scope.editPerson = function ( id ) {
+                        $scope.newPersonId = id;             <!-- присвойили дані змінній "id" -->
+                        $scope.name = $scope.contactlist [id].name;
+                        $scope.phone = $scope.contactlist [id].phone;
+                        $scope.email = $scope.contactlist [id].email;
+                    }
+                    $scope.deletePerson = function( id ) {                 <!--функція кнопки "Видалити"  -->
+                        $scope.contactlist .splice( id, 1 );               <!-- splice для видалення елементів масиву -->
+                    }
+                })
+    </script>
+</head>
+<body ng-app="app" ng-controller="contactlistCtrl">
+
+
+<div >
+
+    <form class="form-horizontal" role="form" class="col-md-6">
+        <div  class="form-group ">
+            <div class="col-md-1">
+                <label class="text-left">П.І.П.</label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" ng-model="name" class="form-control"  placeholder="Data" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-1">
+                <label class="text-left">№ телефону</label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" ng-model="phone"  class="form-control"   placeholder="Number" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-1">
+                <label >Ел. пошта</label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" ng-model="email" class="form-control"  placeholder="Email" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <button  class="btn btn-primary" ng-click="addNewPerson()" ng-hide="newPersonId > -1">Добавити</button>
+                <button  class="btn btn-primary" ng-click="savePerson()" ng-show="newPersonId > -1">Зберегти</button>
+            </div>
+        </div>
+    </form>
+
+    <table id="contactlist " class="table table-striped">
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>П.І.П.</th>
+            <th>№ телефону</th>
+            <th>Ел. пошта</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="person in contactlist ">   <!-- в змінну  "person"  добавляємо елементи масиву "contactlist"-->
+            <td>{{ $index + 1 }}</td>           <!--  зарезервована змінна $index, для того щоб нумерація починалася з одиниці добавляємо "+1"-->
+            <td>{{ person.name }}</td>
+            <td>{{ person.phone }}</td>
+            <td>{{ person.email }}</td>
+            <td>
+                <button class="btn btn-primary btn-xs" ng-click="editPerson($index)"><span class="glyphicon glyphicon-pencil"></span>
+                    Ред-ти</button>
+                <button class="btn btn-primary btn-xs" ng-click="deletePerson($index)"><span class="glyphicon glyphicon-trash"> Видалити</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+</body>
+</html>
