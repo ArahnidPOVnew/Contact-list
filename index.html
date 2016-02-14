@@ -15,11 +15,29 @@
             background-color: rgba(169, 169, 169, 0.53);
         }
         form {
-            max-width:1050px;
+            max-width:1100px;
             margin: 0 auto;
             padding-top: 20px;
             position: relative;
+        }
 
+        input[required].ng-pristine {
+            border-color: #337AB7;
+        }
+
+        input.ng-invalid.ng-dirty{
+            border-color: red;
+        }
+        input.ng-valid.ng-dirty{
+            border-color: green;
+        }
+        form[novalidate] input {
+            border-left-width: 8px;
+            border-color: #3498db;
+            border-style: solid;
+        }
+        #inputHover:hover{
+            background-color: lightgreen;
         }
 
     </style>
@@ -44,7 +62,7 @@
                             $scope.name = '';            <!-- обнулити поле введення -->
                             $scope.phone = '';           <!-- обнулити поле введення -->
                             $scope.email = '';           <!-- обнулити поле введення -->
-                        }                                             <!--  -->
+                        }                                             <!-- -->
                     }
                     $scope.savePerson = function() {     <!-- зберегти редаговані дані -->
                         if( $scope.newPersonId > -1 ){   <!-- робимо перевырку що це новий контакт. -1 --це новий контакт, значення "від  0 зайнято" -->
@@ -75,36 +93,43 @@
 
 <div >
 
-    <form class="form-horizontal" role="form" class="col-md-6">
+    <form name="form" class="form-horizontal" role="form" class="col-md-6" novalidate >
         <div  class="form-group ">
             <div class="col-md-1">
-                <label class="text-left">П.І.П.</label>
+                <label class="text-left" for="inputError1">П.І.П.</label>
             </div>
             <div class="col-md-4">
-                <input type="text" ng-model="name" class="form-control"  placeholder="Data" />
+                <input type="text" ng-model="name" name="text" class="form-control" id="inputHover"  placeholder="Data" required/>
+                <span class="error" ng-show="form.text.$error.required">Required!</span>
             </div>
         </div>
+
         <div class="form-group">
             <div class="col-md-1">
                 <label class="text-left">№ телефону</label>
             </div>
             <div class="col-md-4">
-                <input type="text" ng-model="phone"  class="form-control"   placeholder="Number" />
+                <input type="number" ng-model="phone"  class="form-control" name="number"  id="inputHover" placeholder="Number"  required/>
+                <span class="error" ng-show="form.number.$error.required">Required!</span>
+                <span class="error" ng-show="form.number.$error.number">Not valid number!</span>
             </div>
         </div>
+
         <div class="form-group">
             <div class="col-md-1">
-                <label >Ел. пошта</label>
+                <label class="text-left" >Ел. пошта</label>
             </div>
             <div class="col-md-4">
-                <input type="text" ng-model="email" class="form-control"  placeholder="Email" />
+                <input type="email" ng-model="email" name="email" class="form-control" id="inputHover" placeholder="Email" required/>
+                <span class="error" ng-show="form.email.$error.required">Required!</span>
+                <span class="error" ng-show="form.email.$error.email">Not valid email!</span>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-1"></div>
             <div class="col-md-4">
-                <button  class="btn btn-primary" ng-click="addNewPerson()" ng-hide="newPersonId > -1">Добавити</button>
-                <button  class="btn btn-primary" ng-click="savePerson()" ng-show="newPersonId > -1">Зберегти</button>
+                <button ng-disabled="form.$invalid" class="btn btn-primary" ng-click="addNewPerson()" ng-hide="newPersonId > -1">Добавити</button>
+                <button ng-disabled="form.$invalid" class="btn btn-primary" ng-click="savePerson()" ng-show="newPersonId > -1">Зберегти</button>
             </div>
         </div>
     </form>
@@ -128,7 +153,7 @@
             <td>
                 <button class="btn btn-primary btn-xs" ng-click="editPerson($index)"><span class="glyphicon glyphicon-pencil"></span>
                     Ред-ти</button>
-                <button class="btn btn-primary btn-xs" ng-click="deletePerson($index)"><span class="glyphicon glyphicon-trash"> Видалити</button>
+                <button class="btn btn-primary btn-xs" ng-click="deletePerson($index)" ><span class="glyphicon glyphicon-trash"></span> Видалити</button>
             </td>
         </tr>
         </tbody>
@@ -139,3 +164,4 @@
 
 </body>
 </html>
+
