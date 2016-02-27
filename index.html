@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Телефонна книгаp</title>
+    <title>Телефонна книга</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
     <script type="text/javascript" src="jquery-1.7.2.min.js" ></script>
     <script src="jquery.maskedinput.js" type="text/javascript"></script>
-        <style type="text/css">
+    <script type="text/javascript" src="bootstrap-modal.js" ></script>
+
+    <style type="text/css">
         body{
             background-image: url(ava7.png);
         }
@@ -45,7 +47,7 @@
         #inputHover:hover{
             background-color: #36ee9d;
         }
-        #phone:hover{
+        #phone1:hover{
             background-color: #36ee9d;
         }
 
@@ -96,12 +98,13 @@
                     }
                     $scope.deletePerson = function( id ) {                 <!--функція кнопки "Видалити"  -->
                         $scope.contactlist .splice( id, 1 );               <!-- splice для видалення елементів масиву -->
-
+                        $scope.contactlist;
+                        $('#myModal').modal(options);
                     }
 
                 })
         jQuery(function($){
-            $("#phone").mask(" +380 (99) 999-99-99");
+            $("#phone1").mask(" +380 (99) 999-99-99");
         })
     </script>
 </head>
@@ -126,7 +129,7 @@
                 <label class="text-left">№ телефону</label>
             </div>
             <div class="col-md-4">
-                <input type="text" ng-model="phone"  class="form-control" name="number"  id="phone" placeholder="Number" />
+                <input type="text" ng-model="phone"  class="form-control" name="number"  id="phone1" placeholder="Number" />
                 <span class="error" ng-show="form.number.$error.required">Required!</span>
                 <span class="error" ng-show="form.number.$error.number">Not valid number!</span>
             </div>
@@ -170,14 +173,28 @@
             <td>
                 <button class="btn btn-primary btn-xs" ng-click="editPerson($index)"><span class="glyphicon glyphicon-pencil"></span>
                     Ред-ти</button>
-                <button class="btn btn-primary btn-xs" data-dismiss="modal" ng-click="deletePerson($index)" ><span class="glyphicon glyphicon-trash"></span> Видалити</button>
+                <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" ng-click="deletePerson($index)" ><span class="glyphicon glyphicon-trash"></span> Видалити</button>
             </td>
         </tr>
         </tbody>
     </table>
 
 </div>
-
+<!-- розмітка модального вікна-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><button class="close" type="button" data-dismiss="modal">x</button>
+                <h4 class="modal-title" id="myModalLabel">Видалення контакту</h4>
+            </div>
+            <div class="modal-body">
+                <h3>Ви впевнені що хочете видалити цей контакт?</h3>
+            </div>
+            <div class="modal-footer"><button class="btn btn-default" type="button" data-dismiss="modal">Відміна</button>
+                <button class="btn btn-primary" type="button">Підтвердити</button></div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
